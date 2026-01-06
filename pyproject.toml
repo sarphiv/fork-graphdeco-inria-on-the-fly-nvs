@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "otf-nvs"
+version = "0.0.0"
+description = "On-the-fly Reconstruction for Large-Scale Novel View Synthesis from Unposed Images"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { file = "LICENSE.md" }
+authors = [
+    { name = "GRAPHDECO research group" }
+]
+dependencies = [
+    "cupy-cuda12x",
+    "diff-gaussian-rasterization",
+    "fused-ssim",
+    "graphdecoviewer",
+    "lpips",
+    "numpy",
+    "opencv-python",
+    "plyfile",
+    "simple-knn",
+    "torch",
+    "tqdm",
+    "websockets",
+]
+
+[tool.setuptools]
+py-modules = ["args", "gaussianviewer", "train", "utils"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["dataloaders*", "poses*", "scene*", "webviewer*"]
+namespaces = true
+
+[tool.uv.sources]
+diff-gaussian-rasterization = { path = "submodules/diff-gaussian-rasterization" }
+fused-ssim = { path = "submodules/fused-ssim" }
+simple-knn = { path = "submodules/simple-knn" }
+graphdecoviewer = { path = "submodules/graphdecoviewer" }
