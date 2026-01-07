@@ -8,7 +8,6 @@
 #
 # For inquiries contact  george.drettakis@inria.fr
 #
-
 import torch
 import os
 import sys
@@ -16,7 +15,7 @@ import urllib.request
 import torch.nn.functional as F
 
 from poses.feature_detector import DescribedKeypoints
-from utils import sample
+from utils import sample, torch_cache_root
 
 sys.path.append("submodules/Depth-Anything-V2")
 os.environ["XFORMERS_FORCE_DISABLE_TRITON"] = "1"
@@ -29,7 +28,7 @@ encoder = "vitl"
 class MonoDepthInternal(torch.nn.Module):
     def __init__(self):
         super(MonoDepthInternal, self).__init__()
-        model_path = f"models/depth_anything_v2_{encoder}.pth"
+        model_path = torch_cache_root / "on-the-fly-nvs" / "depth_anything_v2_{encoder}.pth"
         if not os.path.exists(model_path):
             print(f"Downloading Depth-Anything-V2 model for {encoder}, may take a few minutes...")
             model_sizes = {

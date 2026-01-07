@@ -8,7 +8,6 @@ version = "0.0.0"
 description = "On-the-fly Reconstruction for Large-Scale Novel View Synthesis from Unposed Images"
 readme = "README.md"
 requires-python = ">=3.12"
-license = { file = "LICENSE.md" }
 authors = [
     { name = "GRAPHDECO research group" }
 ]
@@ -25,15 +24,31 @@ dependencies = [
     "torch",
     "tqdm",
     "websockets",
+    # Depth Anything V2
+    "gradio_imageslider",
+    "gradio==4.29.0",
+    "matplotlib",
+    "opencv-python",
+    "torch",
+    "torchvision",
 ]
 
 [tool.setuptools]
+package-dir = { "otf_nvs" = ".", "depth_anything_v2" = "submodules/Depth-Anything-V2/depth_anything_v2" }
 py-modules = ["args", "gaussianviewer", "train", "utils"]
-
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["dataloaders*", "poses*", "scene*", "webviewer*"]
-namespaces = true
+packages = [
+    "dataloaders",
+    "poses",
+    "scene",
+    "webviewer",
+    "otf_nvs.dataloaders",
+    "otf_nvs.poses",
+    "otf_nvs.scene",
+    "otf_nvs.webviewer",
+    "depth_anything_v2",
+    "depth_anything_v2.dinov2_layers",
+    "depth_anything_v2.util",
+]
 
 [tool.uv.sources]
 diff-gaussian-rasterization = { path = "submodules/diff-gaussian-rasterization" }

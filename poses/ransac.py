@@ -8,6 +8,7 @@
 #
 # For inquiries contact  george.drettakis@inria.fr
 #
+from pathlib import Path
 
 import torch
 import cupy
@@ -37,12 +38,13 @@ class RANSACEstimator:
         self.max_error = max_error
         self.type = type
 
-        # Read the CUDA source code and set the include directory to poses/
-        with open("poses/ransac.cu", "r") as f:
+        # Read the CUDA source and include the local CUDA headers directory.
+        cuda_dir = Path(__file__).parent
+        with open(cuda_dir / "ransac.cu", "r") as f:
             cuda_source = f.read()
         self.module = cupy.RawModule(
             code=cuda_source,
-            options=("--std=c++14", "-Iposes"),
+            options=("--std=c++14", f"-I{cuda_dir.resolve()}"),
         )
 
         # Set the functions and number of points required for each estimator

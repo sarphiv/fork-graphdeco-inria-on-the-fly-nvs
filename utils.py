@@ -9,6 +9,7 @@
 # For inquiries contact  george.drettakis@inria.fr
 #
 
+from pathlib import Path
 import numpy as np
 import torch
 import math
@@ -16,6 +17,20 @@ import time
 import cv2
 import torch.nn.functional as F
 import os
+
+
+def resolve_torch_cache_root() -> Path:
+    """Return the root of the torch cache directory."""
+    hub_dir = Path(torch.hub.get_dir()).expanduser()
+    get_torch_home = getattr(torch.hub, "_get_torch_home", None)
+    return (
+        hub_dir.parent
+        if hub_dir.name == "hub"
+        else Path(get_torch_home()).expanduser()
+        if get_torch_home is not None
+        else hub_dir
+    )
+torch_cache_root = resolve_torch_cache_root()
 
 def parse_time(seconds):
     return time.strftime("%H:%M:%S", time.gmtime(seconds))

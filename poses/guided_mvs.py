@@ -8,6 +8,7 @@
 #
 # For inquiries contact  george.drettakis@inria.fr
 #
+from pathlib import Path
 
 import math
 import cupy
@@ -21,13 +22,14 @@ class GuidedMVS():
         self.idepth_range = 2e-1
 
         # Read the CUDA source code and set the include directory to poses/
-        with open('poses/guided_mvs.cu', 'r') as f:
+        cuda_dir = Path(__file__).parent
+        with open(cuda_dir / "guided_mvs.cu", 'r') as f:
             cuda_source = f.read()
         cuda_source = cuda_source.replace("NUM_CAMS", str(self.n_cams))
         cuda_source = cuda_source.replace("NUM_DEPTH_CANDIDATES", str(num_depth_candidates))
         self.module = cupy.RawModule(
             code=cuda_source, 
-            options=('--std=c++14', '-Iposes'),
+            options=('--std=c++14', f"-I{cuda_dir.resolve()}"),
         )
         self.uvToDepth = self.module.get_function("uvToDepth")
 

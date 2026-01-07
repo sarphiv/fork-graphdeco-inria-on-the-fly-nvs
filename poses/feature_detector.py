@@ -15,6 +15,7 @@ import torch.nn.functional as F
 import os
 
 from poses.matcher import Matches
+from utils import torch_cache_root
 
 class DescribedKeypoints():
     """
@@ -90,7 +91,7 @@ class InterpolateSparse2d(nn.Module):
 class Detector():
     @torch.no_grad()
     def __init__(self, top_k, width, height):
-        cache_path = f"models/cache/xfeat_{width}_{height}_{top_k}.pt"
+        cache_path = torch_cache_root / "on-the-fly-nvs" / f"xfeat_{width}_{height}_{top_k}.pt"
         dummy_img = torch.randn(1, 3, height, width).cuda().to(torch.half)
         if os.path.exists(cache_path):
             extractor = torch.jit.load(cache_path)

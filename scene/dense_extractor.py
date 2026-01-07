@@ -15,12 +15,13 @@ import os
 import copy
 
 from scene.extractor_model import *
+from utils import torch_cache_root
 
 class DenseExtractor():
     """Extract dense feature maps from an image."""
     @torch.no_grad()
     def __init__(self, width, height):
-        cache_path = f"models/cache/dense_extractor_{width}_{height}.pt"
+        cache_path = torch_cache_root / "on-the-fly-nvs" / f"dense_extractor_{width}_{height}.pt"
         dummy_img = torch.randn(1, 3, height, width).cuda().to(torch.half)
         
         if os.path.exists(cache_path):
